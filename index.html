@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BVFM Demo</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d27; --line:#2a2f3d; --txt:#e8eaf0; --muted:#9aa3b2; --blue:#4f8cff; --red:#ff5d6c; --green:#32cd32; --orange:#ff9f40; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,"Segoe UI",system-ui,sans-serif; background:var(--bg); color:var(--txt); padding:40px 24px; }
+  .wrap { max-width:900px; margin:0 auto; }
+  h1 { font-size:28px; margin:0 0 4px; }
+  .sub { color:var(--muted); margin:0 0 32px; }
+  h2 { font-size:20px; margin:36px 0 6px; border-left:4px solid var(--blue); padding-left:10px; }
+  .desc { color:var(--muted); margin:0 0 16px; font-size:14px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .tag { display:inline-block; font-size:12px; font-weight:600; padding:2px 10px; border-radius:999px; margin-bottom:10px; }
+  .tag.blue { background:rgba(79,140,255,.15); color:var(--blue); }
+  .tag.red    { background:rgba(255,93,108,.15); color:var(--red); }
+  .tag.green  { background:rgba(50,205,50,.15);  color:var(--green); }
+  .tag.orange { background:rgba(255,159,64,.15); color:var(--orange); }
+  .label { font-size:14px; color:var(--muted); margin:0 0 8px; }
+  audio { width:100%; }
+  .text { font-style:italic; color:var(--txt); background:#11131b; border-radius:8px; padding:10px 12px; margin-top:10px; font-size:14px; }
+  .note { color:var(--muted); font-size:12px; margin-top:6px; }
+  @media (max-width:640px){ .grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>BVFM — Demo</h1>
+  <p class="sub">Bidirectional ASR-TTS Flow Matching &nbsp;·&nbsp; single shared checkpoint</p>
+
+  <!-- ============ 1. Zero-shot TTS：同一句、不同語者 ============ -->
+  <h2>1. Zero-shot TTS — same text, different speakers</h2>
+  <p class="desc">同一段文字，用兩個不同 reference 語者合成（一對多 / 語者控制）。</p>
+  <p class="text">"I like text to speech synthesis."</p>
+  <div class="grid">
+    <div class="card">
+      <span class="tag orange">Speaker A</span>
+      <p class="label">reference</p>
+      <audio controls src="audio/spkA_ref.wav"></audio>
+      <p class="label" style="margin-top:12px;">BVFM synthesized</p>
+      <audio controls src="audio/spkA_tts.wav"></audio>
+    </div>
+    <div class="card">
+      <span class="tag green">Speaker B</span>
+      <p class="label">reference</p>
+      <audio controls src="audio/spkB_ref.wav"></audio>
+      <p class="label" style="margin-top:12px;">BVFM synthesized</p>
+      <audio controls src="audio/spkB_tts.wav"></audio>
+    </div>
+  </div>
+
+  <!-- ============ 2. w/o vs w/ z_v（殺手鐧）============ -->
+  <h2>2. Effect of variation latent z<sub>v</sub></h2>
+  <p class="desc">同一句、同一語者：沒有 z<sub>v</sub> → 語者模糊、被平均；有 z<sub>v</sub> → 語者正確（PCA 軌跡圖的聲音版）。</p>
+  <div class="grid">
+    <div class="card">
+      <span class="tag red">without z<sub>v</sub></span>
+      <audio controls src="audio/wo_zv.wav"></audio>
+      <p class="note">deterministic flow — speaker/prosody collapsed</p>
+    </div>
+    <div class="card">
+      <span class="tag blue">with z<sub>v</sub></span>
+      <audio controls src="audio/w_zv.wav"></audio>
+      <p class="note">correct speaker identity</p>
+    </div>
+  </div>
+
+  <!-- ============ 3. ASR ============ -->
+  <h2>3. ASR — same checkpoint, reverse direction</h2>
+  <p class="desc">同一個 checkpoint 反向積分做辨識。</p>
+  <div class="card">
+    <p class="label">input speech</p>
+    <audio controls src="audio/asr_input.wav"></audio>
+    <p class="text">BVFM recognized: "<span id="asr-out">put your recognized transcription here</span>"</p>
+  </div>
+
+  
+</div>
+</body>
+</html>
