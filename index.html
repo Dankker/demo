@@ -29,53 +29,44 @@
 </head>
 <body> 
 <div class="wrap">
-  <h1>BVFM — Demo</h1>
-  <p class="sub">Bidirectional ASR-TTS Flow Matching &nbsp;·&nbsp; single shared checkpoint</p>
+  <h1>BVFM — TTS Demo</h1>
+  <p class="sub">Bidirectional ASR-TTS Flow Matching </p>
 
-  <!-- ============ 1. Zero-shot TTS：同一句、不同語者 ============ -->
-  <h2>1. Zero-shot TTS — same text, different speakers</h2>
-  <p class="desc">同一段文字，用兩個不同 reference 語者合成（一對多 / 語者控制）。</p>
-  <p class="text">"I like text to speech synthesis."</p>
+  
+
   <div class="grid">
-    <div class="card">
+    <!-- ===== Speaker A ===== -->
+    <div>
       <span class="tag orange">Speaker A</span>
-      <p class="label">reference</p>
-      <audio controls src="audio/spkA_ref.wav"></audio>
-      <p class="label" style="margin-top:12px;">BVFM synthesized</p>
-      <audio controls src="audio/spkA_tts.wav"></audio>
+      <div class="card" style="margin-top:8px;">
+        <p class="label">reference</p>
+        <audio controls src="audio/spkA_ref.wav"></audio>
+      </div>
+      <p class="text">"I like text to speech synthesis and the dog is playing with me."</p>
+      <div class="card">
+        <p class="label" style="margin-bottom:10px;">BVFM synthesized</p>
+        <span class="tag red">without z<sub>v</sub></span>
+        <audio controls src="audio/spkA_wo_zv.wav"></audio>
+        <span class="tag blue" style="margin-top:14px;">with z<sub>v</sub></span>
+        <audio controls src="audio/spkA_w_zv.wav"></audio>
+      </div>
     </div>
-    <div class="card">
+    <!-- ===== Speaker B ===== -->
+    <div>
       <span class="tag green">Speaker B</span>
-      <p class="label">reference</p>
-      <audio controls src="audio/spkB_ref.wav"></audio>
-      <p class="label" style="margin-top:12px;">BVFM synthesized</p>
-      <audio controls src="audio/spkB_tts.wav"></audio>
+      <div class="card" style="margin-top:8px;">
+        <p class="label">reference</p>
+        <audio controls src="audio/spkB_ref.wav"></audio>
+      </div>
+      <p class="text">"I like text to speech synthesis."</p>
+      <div class="card">
+        <p class="label" style="margin-bottom:10px;">BVFM synthesized</p>
+        <span class="tag red">without z<sub>v</sub></span>
+        <audio controls src="audio/spkB_wo_zv.wav"></audio>
+        <span class="tag blue" style="margin-top:14px;">with z<sub>v</sub></span>
+        <audio controls src="audio/spkB_w_zv.wav"></audio>
+      </div>
     </div>
-  </div>
-
-  <!-- ============ 2. w/o vs w/ z_v（殺手鐧）============ -->
-  <h2>2. Effect of variation latent z<sub>v</sub></h2>
-  <p class="desc">同一句、同一語者：沒有 z<sub>v</sub> → 語者模糊、被平均；有 z<sub>v</sub> → 語者正確（PCA 軌跡圖的聲音版）。</p>
-  <div class="grid">
-    <div class="card">
-      <span class="tag red">without z<sub>v</sub></span>
-      <audio controls src="audio/wo_zv.wav"></audio>
-      <p class="note">deterministic flow — speaker/prosody collapsed</p>
-    </div>
-    <div class="card">
-      <span class="tag blue">with z<sub>v</sub></span>
-      <audio controls src="audio/w_zv.wav"></audio>
-      <p class="note">correct speaker identity</p>
-    </div>
-  </div>
-
-  <!-- ============ 3. ASR ============ -->
-  <h2>3. ASR — same checkpoint, reverse direction</h2>
-  <p class="desc">同一個 checkpoint 反向積分做辨識。</p>
-  <div class="card">
-    <p class="label">input speech</p>
-    <audio controls src="audio/asr_input.wav"></audio>
-    <p class="text">BVFM recognized: "<span id="asr-out">put your recognized transcription here</span>"</p>
   </div>
 
   
